@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { API_ORIGIN } from "../api/axios";
 
 export default function Checkout() {
     const [formData, setFormData] = useState({
@@ -40,7 +41,7 @@ export default function Checkout() {
 
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/orders/create/",
+                `${API_ORIGIN}/api/orders/create/`,
                 {
                     method: "POST",
                     headers: {

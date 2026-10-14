@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import api from "../api/axios";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -16,8 +17,6 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-
-    const API_URL = "http://127.0.0.1:8000";
 
     const handleChange = (e) => {
         setFormData({
@@ -42,43 +41,11 @@ export default function Login() {
         try {
             setLoading(true);
 
-            const response = await fetch(`${API_URL}/api/users/login/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
+            const response = await api.post("users/login/", {
                     login: formData.login,
                     password: formData.password,
-                }),
             });
-
-            const responseText = await response.text();
-            let data;
-            try {
-                data = responseText ? JSON.parse(responseText) : {};
-            } catch {
-                setError(
-                    `The server returned an unexpected response (HTTP ${response.status}). Please check the Django terminal for details.`
-                );
-                return;
-            }
-
-            if (!response.ok) {
-                if (data.non_field_errors) {
-                    setError(data.non_field_errors[0]);
-                } else if (data.login) {
-                    setError(data.login[0]);
-                } else if (data.detail) {
-                    setError(data.detail);
-                } else {
-                    setError(
-                        "Invalid email/phone number or password."
-                    );
-                }
-
-                return;
-            }
+            const data = response.data;
 
             /*
              * JWT tokens
@@ -116,8 +83,14 @@ export default function Login() {
         } catch (error) {
             console.error("Login error:", error);
 
+            const data = error.response?.data;
             setError(
-                "Could not reach the Django API at http://127.0.0.1:8000. Verify Django is running and try again."
+                data?.non_field_errors?.[0] ||
+                data?.login?.[0] ||
+                data?.detail ||
+                (error.response
+                    ? "Invalid email/phone number or password."
+                    : "Unable to connect to the server. Check the VITE_API_URL deployment setting and make sure the Django API is online.")
             );
         } finally {
             setLoading(false);

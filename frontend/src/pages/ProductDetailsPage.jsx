@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_ORIGIN } from "../api/axios";
 import {
     loadWishlistItems,
     toggleWishlistProduct,
@@ -9,7 +10,7 @@ import {
    API
 ========================================= */
 
-const API_URL = "http://127.0.0.1:8000/api/products/";
+const API_URL = `${API_ORIGIN}/api/products/`;
 
 /* =========================================
    CATEGORIES

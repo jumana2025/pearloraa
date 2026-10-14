@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { API_ORIGIN } from "../api/axios";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = API_ORIGIN;
 
 function getAccessToken() {
     return (

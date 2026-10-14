@@ -10,7 +10,9 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://127.0.0.1:8000";
+import { API_ORIGIN } from "../../api/axios";
+
+const API_URL = API_ORIGIN;
 
 export default function AdminDashboard() {
     const navigate = useNavigate();

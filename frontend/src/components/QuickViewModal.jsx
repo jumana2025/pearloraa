@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_ORIGIN } from "../api/axios";
 
 export default function QuickViewModal({ product, isOpen, onClose }) {
     const navigate = useNavigate();
@@ -27,9 +28,9 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
             return image;
         }
         if (image.startsWith("/")) {
-            return `http://127.0.0.1:8000${image}`;
+            return `${API_ORIGIN}${image}`;
         }
-        return `http://127.0.0.1:8000/${image}`;
+        return `${API_ORIGIN}/${image}`;
     };
 
     const imageUrl = getImageUrl(product.main_image);
@@ -47,7 +48,7 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
             setIsAdding(true);
             setAddError("");
             const response = await fetch(
-                "http://127.0.0.1:8000/api/cart/add/",
+                `${API_ORIGIN}/api/cart/add/`,
                 {
                     method: "POST",
                     headers: {

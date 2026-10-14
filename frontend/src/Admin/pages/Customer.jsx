@@ -11,8 +11,9 @@ import {
     ShieldCheck,
     ShieldOff,
 } from "lucide-react";
+import { API_ORIGIN } from "../../api/axios";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = API_ORIGIN;
 
 export default function Customers() {
     const [customers, setCustomers] = useState([]);

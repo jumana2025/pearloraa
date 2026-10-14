@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, Upload, X, Trash2, CheckCircle, RefreshCw } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_ORIGIN } from "../../api/axios";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = API_ORIGIN;
 
 const inputStyle = {
     borderColor: "#d4c5b0",

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import api from "../api/axios";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -23,8 +24,6 @@ export default function Register() {
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-
-    const API_URL = "http://127.0.0.1:8000";
 
     const handleChange = (e) => {
         setFormData({
@@ -75,72 +74,20 @@ export default function Register() {
         try {
             setLoading(true);
 
-            const response = await fetch(
-                `${API_URL}/api/users/register/`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        first_name: formData.first_name,
-                        last_name: formData.last_name,
-                        username: formData.username,
-                        email: formData.email,
-                        phone: formData.phone,
-                        password: formData.password,
-                        confirm_password: formData.confirm_password,
-                    }),
-                }
-            );
-
-            const data = await response.json();
+            const { data } = await api.post("users/register/", {
+                first_name: formData.first_name,
+                last_name: formData.last_name,
+                username: formData.username,
+                email: formData.email,
+                phone: formData.phone,
+                password: formData.password,
+                confirm_password: formData.confirm_password,
+            });
 
             console.log(
                 "Register response:",
                 JSON.stringify(data, null, 2)
             );
-
-            if (!response.ok) {
-                // Django validation errors
-                if (data.email) {
-                    setError(
-                        Array.isArray(data.email)
-                            ? data.email[0]
-                            : data.email
-                    );
-                } else if (data.username) {
-                    setError(
-                        Array.isArray(data.username)
-                            ? data.username[0]
-                            : data.username
-                    );
-                } else if (data.confirm_password) {
-                    setError(
-                        Array.isArray(data.confirm_password)
-                            ? data.confirm_password[0]
-                            : data.confirm_password
-                    );
-                } else if (data.phone) {
-                    setError(
-                        Array.isArray(data.phone)
-                            ? data.phone[0]
-                            : data.phone
-                    );
-                } else if (data.password) {
-                    setError(
-                        Array.isArray(data.password)
-                            ? data.password[0]
-                            : data.password
-                    );
-                } else if (data.detail) {
-                    setError(data.detail);
-                } else {
-                    setError("Registration failed.");
-                }
-
-                return;
-            }
 
             // Registration successful
             setSuccess(
@@ -168,8 +115,21 @@ export default function Register() {
         } catch (error) {
             console.error("Registration error:", error);
 
+            const data = error.response?.data;
+            const validationError =
+                data?.email ||
+                data?.username ||
+                data?.confirm_password ||
+                data?.phone ||
+                data?.password ||
+                data?.detail;
             setError(
-                "Unable to connect to the server. Please make sure Django is running."
+                (Array.isArray(validationError)
+                    ? validationError[0]
+                    : validationError) ||
+                (error.response
+                    ? "Registration failed."
+                    : "Unable to connect to the server. Check the VITE_API_URL deployment setting and make sure the Django API is online.")
             );
         } finally {
             setLoading(false);

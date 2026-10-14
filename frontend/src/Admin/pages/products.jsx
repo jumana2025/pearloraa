@@ -8,8 +8,9 @@ import {
     Package,
     RefreshCw,
 } from "lucide-react";
+import { API_ORIGIN } from "../../api/axios";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = API_ORIGIN;
 
 const inputBase = {
     borderColor: "#d4c5b0",

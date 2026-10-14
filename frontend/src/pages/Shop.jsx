@@ -5,9 +5,10 @@ import {
     loadWishlistItems,
     toggleWishlistProduct,
 } from "../utils/wishlist";
+import { API_ORIGIN } from "../api/axios";
 
-const API_URL = "http://127.0.0.1:8000/api/products/";
-const CATEGORIES_URL = "http://127.0.0.1:8000/api/products/categories/";
+const API_URL = `${API_ORIGIN}/api/products/`;
+const CATEGORIES_URL = `${API_ORIGIN}/api/products/categories/`;
 
 // --------------------------------------------------
 // Icons
@@ -99,7 +100,7 @@ function getImageUrl(image) {
     }
 
     // Django is already returning a complete URL:
-    // http://127.0.0.1:8000/products/image.jpg
+    // Django returns absolute media URLs in production.
 
     if (
         image.startsWith("http://") ||
@@ -110,10 +111,10 @@ function getImageUrl(image) {
 
     // If Django ever returns a relative URL
     if (image.startsWith("/")) {
-        return `http://127.0.0.1:8000${image}`;
+        return `${API_ORIGIN}${image}`;
     }
 
-    return `http://127.0.0.1:8000/${image}`;
+    return `${API_ORIGIN}/${image}`;
 }
 
 // --------------------------------------------------

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight, Gem } from "lucide-react";
-
-const API_URL = "http://127.0.0.1:8000/api/users/admin-login/";
+import api from "../../api/axios";
 
 export default function AdminLogin() {
     const navigate = useNavigate();
@@ -29,22 +28,8 @@ export default function AdminLogin() {
             setLoading(true);
             setError("");
 
-            const response = await fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                const message =
-                    data?.non_field_errors?.[0] ||
-                    data?.detail ||
-                    data?.message ||
-                    "Invalid admin credentials.";
-                throw new Error(message);
-            }
+            const response = await api.post("users/admin-login/", formData);
+            const data = response.data;
 
             localStorage.setItem("admin_access", data.access);
             localStorage.setItem("admin_refresh", data.refresh);
@@ -52,7 +37,14 @@ export default function AdminLogin() {
 
             navigate("/admin/dashboard");
         } catch (error) {
-            setError(error.message);
+            setError(
+                error.response?.data?.non_field_errors?.[0] ||
+                error.response?.data?.detail ||
+                error.response?.data?.message ||
+                (error.response
+                    ? "Invalid admin credentials."
+                    : "Unable to connect to the server. Check the VITE_API_URL deployment setting and make sure the Django API is online.")
+            );
         } finally {
             setLoading(false);
         }

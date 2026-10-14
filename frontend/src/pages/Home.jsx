@@ -4,14 +4,15 @@ import {
     loadWishlistItems,
     toggleWishlistProduct,
 } from "../utils/wishlist";
+import { API_ORIGIN } from "../api/axios";
 
-const API_URL = "http://127.0.0.1:8000/api/products/";
-const CATEGORIES_URL = "http://127.0.0.1:8000/api/products/categories/";
+const API_URL = `${API_ORIGIN}/api/products/`;
+const CATEGORIES_URL = `${API_ORIGIN}/api/products/categories/`;
 
 function getImageUrl(image) {
     if (!image) return "";
     if (image.startsWith("http://") || image.startsWith("https://")) return image;
-    return `http://127.0.0.1:8000${image.startsWith("/") ? "" : "/"}${image}`;
+    return `${API_ORIGIN}${image.startsWith("/") ? "" : "/"}${image}`;
 }
 
 export default function Home() {
