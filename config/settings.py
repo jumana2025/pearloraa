@@ -190,6 +190,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://pearloraa.vercel.app",
+    "https://pearloraa-jewelry.vercel.app",
     *[
         origin.strip().rstrip("/")
         for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
