@@ -24,7 +24,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     phone = serializers.CharField(
         write_only=True,
-        required=True
+        required=True,
+        max_length=15,
     )
 
     class Meta:
@@ -48,6 +49,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 
             raise serializers.ValidationError(
                 "Email is already registered."
+            )
+
+        return value
+
+    def validate_phone(self, value):
+        if Profile.objects.filter(phone=value).exists():
+            raise serializers.ValidationError(
+                "Phone number is already registered."
             )
 
         return value
@@ -279,4 +288,3 @@ class AdminCustomerSerializer(serializers.ModelSerializer):
             'id', 'first_name', 'last_name', 'username', 'email',
             'phone', 'date_joined', 'is_active', 'profile_image'
         ]
-

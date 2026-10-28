@@ -9,6 +9,80 @@ from .models import Profile
 from wishlist.models import Wishlist, WishlistItem
 
 
+class RegistrationTests(APITestCase):
+    def setUp(self):
+        self.payload = {
+            "first_name": "Pearl",
+            "last_name": "Customer",
+            "username": "pearl-customer",
+            "email": "pearl@example.com",
+            "phone": "9876543210",
+            "password": "secure-test-password",
+            "confirm_password": "secure-test-password",
+        }
+        self.url = reverse("register")
+
+    def test_registration_creates_user_and_profile(self):
+        response = self.client.post(
+            self.url,
+            self.payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        user = User.objects.get(username=self.payload["username"])
+        self.assertTrue(user.check_password(self.payload["password"]))
+        self.assertEqual(user.profile.phone, self.payload["phone"])
+        self.assertEqual(response.data["user"]["email"], self.payload["email"])
+
+    def test_registration_rejects_duplicate_email(self):
+        User.objects.create_user(
+            username="existing-customer",
+            email=self.payload["email"],
+            password="secure-test-password",
+        )
+
+        response = self.client.post(
+            self.url,
+            self.payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("email", response.data)
+
+    def test_registration_rejects_duplicate_phone_without_server_error(self):
+        existing_user = User.objects.create_user(
+            username="existing-customer",
+            email="existing@example.com",
+            password="secure-test-password",
+        )
+        existing_user.profile.phone = self.payload["phone"]
+        existing_user.profile.save(update_fields=["phone"])
+
+        response = self.client.post(
+            self.url,
+            self.payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("phone", response.data)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_registration_rejects_mismatched_passwords(self):
+        self.payload["confirm_password"] = "different-password"
+
+        response = self.client.post(
+            self.url,
+            self.payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("confirm_password", response.data)
+
+
 class LoginWithoutProfileTests(APITestCase):
     def test_login_creates_a_missing_profile_instead_of_returning_500(self):
         User.objects.create_user(

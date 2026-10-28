@@ -84,11 +84,6 @@ export default function Register() {
                 confirm_password: formData.confirm_password,
             });
 
-            console.log(
-                "Register response:",
-                JSON.stringify(data, null, 2)
-            );
-
             // Registration successful
             setSuccess(
                 data.message || "Registration successful!"
@@ -116,21 +111,19 @@ export default function Register() {
             console.error("Registration error:", error);
 
             const data = error.response?.data;
-            const validationError =
-                data?.email ||
-                data?.username ||
-                data?.confirm_password ||
-                data?.phone ||
-                data?.password ||
-                data?.detail;
-            setError(
-                (Array.isArray(validationError)
-                    ? validationError[0]
-                    : validationError) ||
-                (error.response
-                    ? "Registration failed."
-                    : "Unable to connect to the server. Check the VITE_API_URL deployment setting and make sure the Django API is online.")
-            );
+            const validationMessages = data && typeof data === "object"
+                ? Object.values(data)
+                    .flatMap((value) => Array.isArray(value) ? value : [value])
+                    .filter((value) => typeof value === "string" && value.trim())
+                : [];
+
+            if (!error.response) {
+                setError("Unable to connect to the server. Check the VITE_API_URL deployment setting and make sure the Django API is online.");
+            } else if (error.response.status >= 500) {
+                setError("Registration could not be completed right now. Please try again later.");
+            } else {
+                setError(validationMessages[0] || "Registration failed. Please check your details and try again.");
+            }
         } finally {
             setLoading(false);
         }
