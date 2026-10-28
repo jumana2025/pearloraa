@@ -1,14 +1,26 @@
 import { Link } from 'react-router-dom';
+import { Instagram } from 'lucide-react';
+import BrandLogo from './BrandLogo';
 
 export default function Footer() {
     return (
         <footer className="bg-[#1b4332] text-[#f8f4ec] py-10 mt-10">
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 className="text-xl font-bold mb-4 tracking-widest uppercase">Pearloraa</h3>
+                    <BrandLogo to="/home" size="md" inverse className="mb-4" />
                     <p className="text-sm opacity-80">
                         Discover the finest collection of elegantly crafted products, tailored to match your unique aesthetic.
                     </p>
+                    <a
+                        href="https://www.instagram.com/pearl.oraaa?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw=="
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="Visit Pearl.oraaa on Instagram"
+                        className="mt-5 inline-flex items-center gap-2 text-sm transition hover:text-[#d8bd82]"
+                    >
+                        <Instagram size={18} />
+                        <span>@pearl.oraaa</span>
+                    </a>
                 </div>
                 <div>
                     <h4 className="text-lg font-semibold mb-4 uppercase tracking-widest">Quick Links</h4>
@@ -25,7 +37,6 @@ export default function Footer() {
                         <li><Link to="/orders">My Orders</Link></li>
                         <li><Link to="/wishlist">Wishlist</Link></li>
                         <li><Link to="/profile">Profile</Link></li>
-                        <li><Link to="/admin/login">Admin Login</Link></li>
                     </ul>
                 </div>
                 <div>

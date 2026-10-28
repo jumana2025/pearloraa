@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, ArrowRight, Gem } from "lucide-react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import api from "../../api/axios";
+import BrandLogo from "../../components/BrandLogo";
 
 export default function AdminLogin() {
     const navigate = useNavigate();
@@ -68,26 +69,7 @@ export default function AdminLogin() {
             <div className="relative w-full max-w-md">
                 {/* Brand */}
                 <div className="mb-8 text-center">
-                    <div
-                        className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl"
-                        style={{ background: "#a48755" }}
-                    >
-                        <Gem size={32} className="text-white" />
-                    </div>
-
-                    <h1
-                        className="text-3xl font-bold tracking-widest text-white"
-                        style={{ letterSpacing: "0.14em" }}
-                    >
-                        PEARLORAA
-                    </h1>
-
-                    <p
-                        className="mt-1 text-xs font-medium tracking-widest"
-                        style={{ color: "#a48755", letterSpacing: "0.24em" }}
-                    >
-                        FINE JEWELLERY
-                    </p>
+                    <BrandLogo to="/home" size="lg" inverse className="mx-auto mb-5 justify-center" />
                 </div>
 
                 {/* Card */}

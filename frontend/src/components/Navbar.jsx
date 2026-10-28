@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API_ORIGIN } from "../api/axios";
+import BrandLogo from "./BrandLogo";
 
 const API_URL = API_ORIGIN;
 
@@ -439,42 +440,7 @@ export default function Navbar() {
                     LOGO
                 ================================================== */}
 
-                <Link
-                    to="/home"
-                    className="group flex items-center"
-                    aria-label="Pearloraa Home"
-                >
-                    <div className="leading-none">
-
-                        <span
-                            className="
-                                block
-                                font-serif
-                                text-[27px]
-                                tracking-[0.08em]
-                                text-[#1b4332]
-                                sm:text-[30px]
-                            "
-                        >
-                            PEARLORAA
-                        </span>
-
-                        <span
-                            className="
-                                mt-1
-                                block
-                                text-center
-                                text-[7px]
-                                font-medium
-                                tracking-[0.38em]
-                                text-[#a48755]
-                            "
-                        >
-                            FINE JEWELLERY
-                        </span>
-
-                    </div>
-                </Link>
+                <BrandLogo to="/home" size="sm" className="group" />
 
                 {/* ==================================================
                     DESKTOP NAVIGATION

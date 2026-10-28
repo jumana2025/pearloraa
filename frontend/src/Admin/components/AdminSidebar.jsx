@@ -8,8 +8,8 @@ import {
     LogOut,
     ChevronLeft,
     ChevronRight,
-    Gem,
 } from "lucide-react";
+import BrandLogo from "../../components/BrandLogo";
 
 const menuItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
@@ -38,34 +38,11 @@ export default function AdminSidebar({ collapsed, onToggle, mobileOpen, setMobil
                 style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
                 {!collapsed && (
-                    <div className="flex items-center gap-2 overflow-hidden">
-                        <div
-                            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg"
-                            style={{ background: "#a48755" }}
-                        >
-                            <Gem size={16} className="text-white" />
-                        </div>
-                        <div className="leading-tight">
-                            <p
-                                className="text-sm font-bold tracking-widest text-white"
-                                style={{ letterSpacing: "0.12em" }}
-                            >
-                                PEARLORAA
-                            </p>
-                            <p
-                                className="text-[8px] font-medium tracking-widest"
-                                style={{ color: "#a48755", letterSpacing: "0.22em" }}
-                            >
-                                ADMIN PANEL
-                            </p>
-                        </div>
-                    </div>
+                    <BrandLogo size="sm" inverse className="min-w-0 gap-2 overflow-hidden" />
                 )}
 
                 {collapsed && (
-                    <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: "#a48755" }}>
-                        <Gem size={16} className="text-white" />
-                    </div>
+                    <BrandLogo size="sm" hideText className="mx-auto" />
                 )}
             </div>
 

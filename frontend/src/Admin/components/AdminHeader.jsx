@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, ChevronDown, LogOut } from "lucide-react";
+import BrandLogo from "../../components/BrandLogo";
 
 export default function AdminHeader({ onMobileToggle }) {
     const [profileOpen, setProfileOpen] = useState(false);
@@ -39,6 +40,7 @@ export default function AdminHeader({ onMobileToggle }) {
                 >
                     <Menu size={18} />
                 </button>
+                <BrandLogo to="/" size="sm" className="ml-1" />
             </div>
 
             {/* Right */}

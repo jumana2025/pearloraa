@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import api from "../api/axios";
+import BrandLogo from "../components/BrandLogo";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -104,6 +105,8 @@ export default function Login() {
 
                 {/* Header */}
                 <div className="text-center mb-8">
+
+                    <BrandLogo to="/home" size="lg" className="mb-6 justify-center" />
 
                     <h1 className="text-3xl font-bold text-gray-900">
                         Welcome Back
