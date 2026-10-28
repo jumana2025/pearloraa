@@ -34,7 +34,7 @@ export default function Checkout() {
         setIsSubmitting(true);
         setSubmitError("");
 
-        const whatsappNumber = "917306519056";
+        const whatsappNumber = "919995391397";
         const token =
             localStorage.getItem("access_token") ||
             sessionStorage.getItem("access_token");
