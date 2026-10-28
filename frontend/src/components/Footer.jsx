@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Instagram } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
 export default function Footer() {
@@ -18,7 +17,20 @@ export default function Footer() {
                         aria-label="Visit Pearl.oraaa on Instagram"
                         className="mt-5 inline-flex items-center gap-2 text-sm transition hover:text-[#d8bd82]"
                     >
-                        <Instagram size={18} />
+                        <svg
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="h-[18px] w-[18px]"
+                        >
+                            <rect x="3" y="3" width="18" height="18" rx="5" />
+                            <circle cx="12" cy="12" r="4" />
+                            <circle cx="17.5" cy="6.5" r="0.7" fill="currentColor" stroke="none" />
+                        </svg>
                         <span>@pearl.oraaa</span>
                     </a>
                 </div>
