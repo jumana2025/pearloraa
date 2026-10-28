@@ -38,11 +38,11 @@ export default function AdminSidebar({ collapsed, onToggle, mobileOpen, setMobil
                 style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
                 {!collapsed && (
-                    <BrandLogo size="sm" inverse className="min-w-0 gap-2 overflow-hidden" />
+                    <BrandLogo size="sm" inverse className="min-w-0 overflow-hidden" />
                 )}
 
                 {collapsed && (
-                    <BrandLogo size="sm" hideText className="mx-auto" />
+                    <BrandLogo size="sm" compact inverse className="mx-auto" />
                 )}
             </div>
 

@@ -6,7 +6,7 @@ export default function Footer() {
         <footer className="bg-[#1b4332] text-[#f8f4ec] py-10">
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <BrandLogo to="/home" size="md" className="mb-4" />
+                    <BrandLogo to="/home" size="md" inverse className="mb-4" />
                     <p className="text-sm opacity-80">
                         Discover the finest collection of elegantly crafted products, tailored to match your unique aesthetic.
                     </p>
