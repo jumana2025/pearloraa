@@ -160,3 +160,18 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - Image"
+
+
+class HomePageSettings(models.Model):
+    id = models.PositiveSmallIntegerField(primary_key=True, default=1, editable=False)
+    hero_image = models.ImageField(upload_to="homepage/", blank=True, null=True)
+    editorial_image = models.ImageField(upload_to="homepage/", blank=True, null=True)
+    gifting_image = models.ImageField(upload_to="homepage/", blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Home page settings"
+        verbose_name_plural = "Home page settings"
+
+    def __str__(self):
+        return "Home page images"

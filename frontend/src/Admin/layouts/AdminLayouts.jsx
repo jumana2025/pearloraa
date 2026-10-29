@@ -31,7 +31,7 @@ export default function AdminLayout() {
                 className={`flex min-h-screen flex-col transition-all duration-300 ${collapsed ? "lg:ml-[72px]" : "lg:ml-64"}`}
             >
                 {/* Topbar */}
-                <AdminHeader onMobileToggle={() => setMobileOpen(true)} />
+                <AdminHeader onMobileToggle={() => setMobileOpen((open) => !open)} mobileOpen={mobileOpen} />
 
                 {/* Page content */}
                 <main className="flex-1 p-4 md:p-6 lg:p-8">
@@ -40,7 +40,7 @@ export default function AdminLayout() {
 
                 {/* Footer */}
                 <footer
-                    className="border-t px-8 py-4 text-center text-xs"
+                    className="border-t px-4 py-4 text-center text-xs sm:px-8"
                     style={{ borderColor: "#e8e0d5", color: "#a48755" }}
                 >
                     © {new Date().getFullYear()} Pearloraa Fine Jewellery · Admin Panel

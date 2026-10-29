@@ -69,7 +69,7 @@ export default function AdminLogin() {
             <div className="relative w-full max-w-md">
                 {/* Brand */}
                 <div className="mb-8 text-center">
-                    <BrandLogo to="/home" size="lg" inverse className="mx-auto mb-5 justify-center" />
+                    <BrandLogo to="/" size="lg" inverse className="mx-auto mb-5 justify-center" />
                 </div>
 
                 {/* Card */}

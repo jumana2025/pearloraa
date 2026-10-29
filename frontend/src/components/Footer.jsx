@@ -6,7 +6,7 @@ export default function Footer() {
         <footer className="bg-[#1b4332] text-[#f8f4ec] py-10">
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <BrandLogo to="/home" size="md" inverse className="mb-4" />
+                    <BrandLogo to="/" size="md" inverse className="mb-4" />
                     <p className="text-sm opacity-80">
                         Discover the finest collection of elegantly crafted products, tailored to match your unique aesthetic.
                     </p>
@@ -37,7 +37,7 @@ export default function Footer() {
                 <div>
                     <h4 className="text-lg font-semibold mb-4 uppercase tracking-widest">Quick Links</h4>
                     <ul className="space-y-2 text-sm opacity-80">
-                        <li><Link to="/home">Home</Link></li>
+                        <li><Link to="/">Home</Link></li>
                         <li><Link to="/shop">Shop</Link></li>
                         <li><Link to="/collections">Collections</Link></li>
                         <li><Link to="/about">About Us</Link></li>

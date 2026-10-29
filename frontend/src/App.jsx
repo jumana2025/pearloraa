@@ -37,6 +37,7 @@ const EditProduct = lazy(() => import("./Admin/pages/EditProduct"));
 const Categories = lazy(() => import("./Admin/pages/Categories"));
 const Customers = lazy(() => import("./Admin/pages/Customer"));
 const AdminOrders = lazy(() => import("./Admin/pages/Orders"));
+const HomeImages = lazy(() => import("./Admin/pages/HomeImages"));
 
 // ==========================================
 // CUSTOMER LAYOUT
@@ -221,6 +222,11 @@ export default function App() {
             <Route
               path="orders"
               element={<AdminOrders />}
+            />
+
+            <Route
+              path="home-images"
+              element={<HomeImages />}
             />
 
           </Route>

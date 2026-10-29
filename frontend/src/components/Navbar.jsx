@@ -440,7 +440,7 @@ export default function Navbar() {
                     LOGO
                 ================================================== */}
 
-                <BrandLogo to="/home" size="sm" className="group" />
+                <BrandLogo to="/" size="sm" className="group" />
 
                 {/* ==================================================
                     DESKTOP NAVIGATION
@@ -689,9 +689,11 @@ export default function Navbar() {
                         )
                     }
                     className="
+                        ml-auto
                         flex
-                        h-10
-                        w-10
+                        h-11
+                        w-11
+                        shrink-0
                         items-center
                         justify-center
                         text-[#1b4332]

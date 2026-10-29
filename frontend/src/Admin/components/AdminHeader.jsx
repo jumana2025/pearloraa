@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Menu, ChevronDown, LogOut } from "lucide-react";
+import { Menu, ChevronDown, LogOut, X } from "lucide-react";
 import BrandLogo from "../../components/BrandLogo";
 
-export default function AdminHeader({ onMobileToggle }) {
+export default function AdminHeader({ onMobileToggle, mobileOpen }) {
     const [profileOpen, setProfileOpen] = useState(false);
 
     const adminUser = (() => {
@@ -35,10 +35,13 @@ export default function AdminHeader({ onMobileToggle }) {
                 {/* Mobile sidebar toggle */}
                 <button
                     onClick={onMobileToggle}
+                    type="button"
+                    aria-label={mobileOpen ? "Close admin menu" : "Open admin menu"}
+                    aria-expanded={mobileOpen}
                     className="flex h-9 w-9 items-center justify-center rounded-lg border text-gray-500 hover:bg-gray-50 lg:hidden"
                     style={{ borderColor: "#e8e0d5" }}
                 >
-                    <Menu size={18} />
+                    {mobileOpen ? <X size={18} /> : <Menu size={18} />}
                 </button>
                 <BrandLogo to="/" size="sm" className="ml-1" />
             </div>

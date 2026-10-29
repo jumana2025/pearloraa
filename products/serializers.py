@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category, Product, ProductImage
+from .models import Category, HomePageSettings, Product, ProductImage
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -111,6 +111,13 @@ class AdminProductImageSerializer(serializers.ModelSerializer):
             "id",
             "created_at",
         ]
+
+
+class HomePageSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomePageSettings
+        fields = ["hero_image", "editorial_image", "gifting_image", "updated_at"]
+        read_only_fields = ["updated_at"]
 
 
 class AdminProductSerializer(serializers.ModelSerializer):

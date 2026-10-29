@@ -99,14 +99,14 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-start px-4 pb-10 pt-24 sm:pt-28 md:justify-center md:pb-12">
 
             <div className="w-full max-w-md">
 
                 {/* Header */}
                 <div className="text-center mb-8">
 
-                    <BrandLogo to="/home" size="lg" className="mb-6 justify-center" />
+                    <BrandLogo to="/" size="lg" className="mx-auto mb-5 justify-center" />
 
                     <h1 className="text-3xl font-bold text-gray-900">
                         Welcome Back

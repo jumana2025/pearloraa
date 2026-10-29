@@ -46,9 +46,10 @@ export default function Collections() {
 
     const dynamicCollections = categories.map((cat, index) => {
         const productsInCat = products.filter(p => p.category?.name === cat.name);
-        const image = productsInCat.length > 0 && productsInCat[0].main_image 
-            ? getImageUrl(productsInCat[0].main_image) 
-            : "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1200&q=85";
+        const image = getImageUrl(cat.image)
+            || (productsInCat.length > 0 && productsInCat[0].main_image
+                ? getImageUrl(productsInCat[0].main_image)
+                : "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1200&q=85");
         
         return {
             id: cat.id || cat.name,

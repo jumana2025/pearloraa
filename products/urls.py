@@ -10,6 +10,8 @@ from .views import (
     AdminProductDetailView,
     AdminProductImageListCreateView,
     AdminProductImageDetailView,
+    HomePageSettingsView,
+    AdminHomePageSettingsView,
 )
 
 
@@ -70,5 +72,17 @@ urlpatterns = [
         "admin/products/<int:product_id>/images/<int:pk>/",
         AdminProductImageDetailView.as_view(),
         name="admin-product-image-detail",
+    ),
+
+    path(
+        "homepage/",
+        HomePageSettingsView.as_view(),
+        name="homepage-settings",
+    ),
+
+    path(
+        "admin/homepage/",
+        AdminHomePageSettingsView.as_view(),
+        name="admin-homepage-settings",
     ),
 ]

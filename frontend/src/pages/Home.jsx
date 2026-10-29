@@ -18,6 +18,7 @@ function getImageUrl(image) {
 export default function Home() {
     const [products, setProducts] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
+    const [homeImages, setHomeImages] = useState({});
     const [wishlistIds, setWishlistIds] = useState([]);
     const [wishlistError, setWishlistError] = useState("");
 
@@ -47,6 +48,11 @@ export default function Home() {
             }
         };
         fetchCategories();
+
+        fetch(`${API_URL}homepage/`)
+            .then((response) => response.ok ? response.json() : null)
+            .then((data) => data && setHomeImages(data))
+            .catch((err) => console.error("Error fetching homepage images", err));
     }, []);
 
     useEffect(() => {
@@ -122,11 +128,11 @@ export default function Home() {
     }));
 
     const dynamicCategories = categoryList.slice(0, 3).map(cat => {
-        // Find first product in this category to get an image
+        // Prefer the image assigned to this category in the admin page.
         const productInCat = products.find(p => p.category?.name === cat.name);
         return {
             name: cat.name,
-            image: productInCat ? getImageUrl(productInCat.main_image) : "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1000&q=85",
+            image: getImageUrl(cat.image) || (productInCat ? getImageUrl(productInCat.main_image) : "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1000&q=85"),
         };
     });
     return (
@@ -207,7 +213,7 @@ export default function Home() {
                     <div className="relative h-[400px] overflow-hidden sm:h-[480px] lg:h-[590px]">
 
                         <img
-                            src="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1600&q=90"
+                            src={getImageUrl(homeImages.hero_image) || "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1600&q=90"}
                             alt="Elegant gold jewelry"
                             className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[1800ms] hover:scale-[1.025]"
                         />
@@ -358,7 +364,7 @@ export default function Home() {
                     <div className="relative h-[400px] overflow-hidden sm:h-[500px] lg:h-[570px]">
 
                         <img
-                            src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1400&q=90"
+                            src={getImageUrl(homeImages.editorial_image) || "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1400&q=90"}
                             alt="Pearloraa jewelry editorial"
                             className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1600ms] hover:scale-[1.035]"
                         />
@@ -561,7 +567,7 @@ export default function Home() {
                     <div className="order-1 overflow-hidden lg:order-2">
 
                         <img
-                            src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=1300&q=90"
+                            src={getImageUrl(homeImages.gifting_image) || "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=1300&q=90"}
                             alt="Luxury jewelry gift box"
                             className="aspect-[4/3] max-h-[450px] w-full object-cover transition-transform duration-[1400ms] hover:scale-[1.03]"
                         />

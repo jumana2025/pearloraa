@@ -3,9 +3,9 @@ from django.db.models import Q
 from rest_framework import generics
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
-from .models import Category, Product, ProductImage
+from .models import Category, HomePageSettings, Product, ProductImage
 
 from .serializers import (
     CategorySerializer,
@@ -13,6 +13,7 @@ from .serializers import (
     AdminCategorySerializer,
     AdminProductSerializer,
     AdminProductImageSerializer,
+    HomePageSettingsSerializer,
 )
 
 
@@ -219,3 +220,22 @@ class AdminProductImageDetailView(generics.DestroyAPIView):
 
     def get_queryset(self):
         return ProductImage.objects.filter(product_id=self.kwargs["product_id"])
+
+
+class HomePageSettingsView(generics.RetrieveAPIView):
+    serializer_class = HomePageSettingsSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        settings, _ = HomePageSettings.objects.get_or_create(pk=1)
+        return settings
+
+
+class AdminHomePageSettingsView(generics.RetrieveUpdateAPIView):
+    serializer_class = HomePageSettingsSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get_object(self):
+        settings, _ = HomePageSettings.objects.get_or_create(pk=1)
+        return settings

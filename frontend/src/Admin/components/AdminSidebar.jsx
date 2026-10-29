@@ -5,6 +5,7 @@ import {
     Layers,
     Users,
     ShoppingBag,
+    Images,
     LogOut,
     ChevronLeft,
     ChevronRight,
@@ -17,6 +18,7 @@ const menuItems = [
     { name: "Categories", path: "/admin/categories", icon: Layers },
     { name: "Customers", path: "/admin/customers", icon: Users },
     { name: "Orders", path: "/admin/orders", icon: ShoppingBag },
+    { name: "Home Images", path: "/admin/home-images", icon: Images },
 ];
 
 export default function AdminSidebar({ collapsed, onToggle, mobileOpen, setMobileOpen }) {
@@ -29,7 +31,7 @@ export default function AdminSidebar({ collapsed, onToggle, mobileOpen, setMobil
 
     return (
         <aside
-            className={`fixed left-0 top-0 z-40 flex h-screen flex-col transition-transform duration-300 ${collapsed ? "w-[72px]" : "w-64"} ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+            className={`fixed left-0 top-0 z-40 flex h-dvh w-[min(18rem,85vw)] flex-col transition-transform duration-300 lg:h-screen ${collapsed ? "lg:w-[72px]" : "lg:w-64"} ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
             style={{ background: "#1b4332" }}
         >
             {/* Logo */}
@@ -37,11 +39,11 @@ export default function AdminSidebar({ collapsed, onToggle, mobileOpen, setMobil
                 className="flex h-[70px] items-center justify-between border-b px-4 flex-shrink-0"
                 style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
-                {!collapsed && (
+                {(!collapsed || mobileOpen) && (
                     <BrandLogo size="sm" inverse className="min-w-0 overflow-hidden" />
                 )}
 
-                {collapsed && (
+                {collapsed && !mobileOpen && (
                     <BrandLogo size="sm" compact inverse className="mx-auto" />
                 )}
             </div>
@@ -49,7 +51,7 @@ export default function AdminSidebar({ collapsed, onToggle, mobileOpen, setMobil
             {/* Toggle button */}
             <button
                 onClick={onToggle}
-                className="absolute -right-3 top-[58px] z-50 flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-md hover:bg-gray-50"
+                className="absolute -right-3 top-[58px] z-50 hidden h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-md hover:bg-gray-50 lg:flex"
             >
                 {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
             </button>
@@ -84,7 +86,7 @@ export default function AdminSidebar({ collapsed, onToggle, mobileOpen, setMobil
                                             isActive ? "text-white" : "text-white/60 group-hover:text-white"
                                         }`}
                                     />
-                                    {!collapsed && (
+                                    {(!collapsed || mobileOpen) && (
                                         <span className="truncate">{item.name}</span>
                                     )}
                                 </>
@@ -105,7 +107,7 @@ export default function AdminSidebar({ collapsed, onToggle, mobileOpen, setMobil
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-white/60 transition hover:bg-white/10 hover:text-red-400"
                 >
                     <LogOut size={19} className="flex-shrink-0" />
-                    {!collapsed && <span>Logout</span>}
+                    {(!collapsed || mobileOpen) && <span>Logout</span>}
                 </button>
             </div>
         </aside>
