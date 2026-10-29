@@ -2,6 +2,20 @@ from django.db import models
 from django.utils.text import slugify
 
 
+class StoredMedia(models.Model):
+    """Uploaded media kept in the configured database for durable deployments."""
+
+    name = models.CharField(max_length=500, unique=True)
+    content = models.BinaryField()
+    content_type = models.CharField(max_length=100, default="application/octet-stream")
+    size = models.PositiveBigIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "stored media file"
+        verbose_name_plural = "stored media files"
+
+
 class Category(models.Model):
 
     name = models.CharField(
@@ -68,7 +82,7 @@ class Product(models.Model):
         blank=True
     )
 
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     price = models.DecimalField(
         max_digits=10,

@@ -179,7 +179,10 @@ export default function EditProduct() {
 
             if (!res.ok) {
                 const data = await res.json().catch(() => ({}));
-                setError(data.detail || "Failed to update product.");
+                const firstFieldError = Object.values(data)
+                    .flat()
+                    .find((value) => typeof value === "string");
+                setError(data.detail || firstFieldError || "Failed to update product.");
                 return;
             }
 
@@ -187,11 +190,19 @@ export default function EditProduct() {
                 const imgData = new FormData();
                 imgData.append("product", id);
                 imgData.append("image", image);
-                await fetch(`${API_URL}/api/products/admin/products/${id}/images/`, {
+                const imageRes = await fetch(`${API_URL}/api/products/admin/products/${id}/images/`, {
                     method: "POST",
                     headers: { Authorization: `Bearer ${token}` },
                     body: imgData,
                 });
+                if (!imageRes.ok) {
+                    const data = await imageRes.json().catch(() => ({}));
+                    const firstFieldError = Object.values(data)
+                        .flat()
+                        .find((value) => typeof value === "string");
+                    setError(data.detail || firstFieldError || "Product updated, but a gallery image could not be uploaded.");
+                    return;
+                }
             }
 
             navigate("/admin/products");

@@ -1,102 +1,83 @@
-import os
-import uuid
-from pathlib import PurePosixPath
-from urllib.request import urlopen
+from urllib.parse import quote
 
 from django.conf import settings
 from django.core.files.base import ContentFile
-from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import FileSystemStorage, Storage
 
 
-class PersistentMediaStorage(Storage):
-    """Use Cloudinary in production when configured; keep local development simple."""
+class DatabaseMediaStorage(Storage):
+    """Store uploaded files in the configured database in deployed environments."""
 
     def __init__(self):
-        self.cloudinary_url = os.getenv("CLOUDINARY_URL", "").strip()
         self.local_storage = FileSystemStorage(
             location=settings.MEDIA_ROOT,
             base_url=settings.MEDIA_URL,
         )
 
-        if self.cloudinary_url:
-            import cloudinary
-
-            cloudinary.config(cloudinary_url=self.cloudinary_url, secure=True)
-
     @property
-    def uses_cloudinary(self):
-        return bool(self.cloudinary_url)
+    def uses_database(self):
+        return not settings.DEBUG
 
     def _save(self, name, content):
-        if not self.uses_cloudinary:
-            if os.getenv("RENDER_EXTERNAL_HOSTNAME") or not settings.DEBUG:
-                raise ImproperlyConfigured(
-                    "Set CLOUDINARY_URL in the production environment before uploading media."
-                )
+        if not self.uses_database:
             return self.local_storage.save(name, content)
 
-        import cloudinary.uploader
+        from .models import StoredMedia
 
-        path = PurePosixPath(name)
         if hasattr(content, "seek"):
             content.seek(0)
-        result = cloudinary.uploader.upload(
-            content,
-            folder="/".join(path.parts[:-1]),
-            public_id=f"{path.stem}-{uuid.uuid4().hex[:12]}",
-            resource_type="image",
-            overwrite=False,
+        data = b"".join(content.chunks()) if hasattr(content, "chunks") else content.read()
+        StoredMedia.objects.update_or_create(
+            name=name,
+            defaults={
+                "content": data,
+                "content_type": getattr(content, "content_type", None)
+                or "application/octet-stream",
+                "size": len(data),
+            },
         )
-        return result["public_id"]
+        return name
 
     def _open(self, name, mode="rb"):
-        if not self.uses_cloudinary:
+        if not self.uses_database:
             return self.local_storage.open(name, mode)
 
-        return ContentFile(urlopen(self.url(name)).read(), name=name)
+        from .models import StoredMedia
+
+        media = StoredMedia.objects.get(name=name)
+        return ContentFile(bytes(media.content), name=name)
 
     def delete(self, name):
-        if not self.uses_cloudinary:
+        if not self.uses_database:
             return self.local_storage.delete(name)
 
-        import cloudinary.uploader
+        from .models import StoredMedia
 
-        cloudinary.uploader.destroy(name, resource_type="image")
+        StoredMedia.objects.filter(name=name).delete()
 
     def exists(self, name):
-        if not self.uses_cloudinary:
+        if not self.uses_database:
             return self.local_storage.exists(name)
 
-        import cloudinary.api
+        from .models import StoredMedia
 
-        try:
-            cloudinary.api.resource(name, resource_type="image", type="upload")
-            return True
-        except Exception:
-            return False
+        return StoredMedia.objects.filter(name=name).exists()
 
     def size(self, name):
-        if not self.uses_cloudinary:
+        if not self.uses_database:
             return self.local_storage.size(name)
 
-        import cloudinary.api
+        from .models import StoredMedia
 
-        return cloudinary.api.resource(
-            name,
-            resource_type="image",
-            type="upload",
-        )["bytes"]
+        return StoredMedia.objects.values_list("size", flat=True).get(name=name)
 
     def url(self, name):
-        if not self.uses_cloudinary:
+        if not self.uses_database:
             return self.local_storage.url(name)
 
-        import cloudinary
-
-        return cloudinary.CloudinaryImage(name).build_url(secure=True)
+        return f"{settings.MEDIA_URL}{quote(name, safe='/')}"
 
     def path(self, name):
-        if not self.uses_cloudinary:
+        if not self.uses_database:
             return self.local_storage.path(name)
-        raise NotImplementedError("Cloudinary media files do not have a local filesystem path.")
+        raise NotImplementedError("Database-stored media has no local filesystem path.")
