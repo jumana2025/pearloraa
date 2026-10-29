@@ -133,7 +133,8 @@ export default function AddProduct() {
 
             if (!res.ok) {
                 const data = await res.json().catch(() => ({}));
-                setError(data.detail || "Failed to create product.");
+                const firstFieldError = Object.values(data).flat().find((value) => typeof value === "string");
+                setError(data.detail || firstFieldError || "Failed to create product.");
                 return;
             }
 
@@ -143,11 +144,17 @@ export default function AddProduct() {
                 const imgData = new FormData();
                 imgData.append("product", product.id);
                 imgData.append("image", image);
-                await fetch(`${API_URL}/api/products/admin/products/${product.id}/images/`, {
+                const imageRes = await fetch(`${API_URL}/api/products/admin/products/${product.id}/images/`, {
                     method: "POST",
                     headers: { Authorization: `Bearer ${token}` },
                     body: imgData,
                 });
+                if (!imageRes.ok) {
+                    const data = await imageRes.json().catch(() => ({}));
+                    const firstFieldError = Object.values(data).flat().find((value) => typeof value === "string");
+                    setError(data.detail || firstFieldError || "Product saved, but a gallery image could not be uploaded.");
+                    return;
+                }
             }
 
             navigate("/admin/products");
