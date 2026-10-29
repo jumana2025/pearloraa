@@ -19,6 +19,26 @@ const inputStyle = {
     outline: "none",
 };
 
+function getCategorySaveError(data) {
+    if (typeof data?.detail === "string") return data.detail;
+
+    for (const [field, value] of Object.entries(data || {})) {
+        const message = Array.isArray(value)
+            ? value.find((item) => typeof item === "string")
+            : value;
+        if (typeof message !== "string") continue;
+
+        const label = field === "name"
+            ? "Category name"
+            : field === "image"
+                ? "Category image"
+                : field.charAt(0).toUpperCase() + field.slice(1);
+        return `${label}: ${message}`;
+    }
+
+    return "Failed to save category. Please review the category details and try again.";
+}
+
 export default function Categories() {
     const [categories, setCategories] = useState([]);
     const [search, setSearch] = useState("");
@@ -86,13 +106,22 @@ export default function Categories() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.name.trim()) { setError("Category name is required."); return; }
+        const normalizedName = form.name.trim().toLocaleLowerCase();
+        const duplicate = categories.some((category) =>
+            category.id !== editingCategory?.id &&
+            category.name?.trim().toLocaleLowerCase() === normalizedName
+        );
+        if (duplicate) {
+            setError("A category with this name already exists. Choose a different name.");
+            return;
+        }
 
         try {
             setSaving(true);
             setError("");
             const token = localStorage.getItem("admin_access");
             const formData = new FormData();
-            formData.append("name", form.name);
+            formData.append("name", form.name.trim());
             formData.append("description", form.description);
             formData.append("is_active", form.is_active ? "true" : "false");
             if (form.image) formData.append("image", form.image);
@@ -110,7 +139,7 @@ export default function Categories() {
 
             if (!res.ok) {
                 const data = await res.json().catch(() => ({}));
-                setError(data.detail || "Failed to save category.");
+                setError(getCategorySaveError(data));
                 return;
             }
 
