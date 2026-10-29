@@ -63,9 +63,7 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_main_image(self, product):
         request = self.context.get("request")
 
-        if product.main_image and product.main_image.storage.exists(
-            product.main_image.name
-        ):
+        if product.main_image:
             image_url = product.main_image.url
         else:
             first_image = product.images.first()

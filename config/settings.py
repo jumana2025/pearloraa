@@ -200,3 +200,14 @@ CORS_ALLOWED_ORIGINS = [
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Uploaded media must use durable storage in production. Render's local
+# filesystem is ephemeral, so configure CLOUDINARY_URL in the Render service.
+STORAGES = {
+    "default": {
+        "BACKEND": "products.storage.PersistentMediaStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
