@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.urls import include, path, re_path
-from django.views.static import serve
 
 from django.conf import settings
 from django.conf.urls.static import static
+from products.media import serve_media
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -63,12 +63,10 @@ if settings.DEBUG:
         document_root=settings.MEDIA_ROOT
     )
 else:
-    # Render's web service filesystem holds uploaded media locally. Serve those
-    # files in production too; move media to object storage for persistence.
+    # Serve database-backed uploads in production, with local-file fallback.
     urlpatterns += [
         re_path(
             r"^media/(?P<path>.*)$",
-            serve,
-            {"document_root": settings.MEDIA_ROOT},
+            serve_media,
         ),
     ]
